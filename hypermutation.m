@@ -9,7 +9,7 @@ k = tmp(2);
 mutated (i)= individu (k);
 mutated (k)= individu (i);
 
-fm = FitnessI(mutated);
+fm = FitnessI_opt(mutated);
 end
 
  

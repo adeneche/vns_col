@@ -35,8 +35,22 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
         ab= P( j,:) ;
         fab=Fp(j);
         nc= nombreclones(N, Nc, j);
+ 
+        leftd = zeros(2*M, 1);
+        rightd = zeros(2*M, 1);
+
+        for i= 1:M
+            leftd(i + ab(i)) = leftd(i + ab(i)) + 1;
+            rightd(M-i + ab(i)) = rightd(M-i + ab(i)) + 1;
+        end
+        
         for i=1:nc
-            [clone fc]= hypermutation (ab, fab);
+            [clone fc]= hypermutation3 (ab, fab, leftd, rightd);
+%             if (~isequal(fc, FitnessI(clone)))
+%                 error(['expected ' int2str(FitnessI(clone)) ' but found ' int2str(fc)]);
+%             end
+%             [clone fc]= hypermutation (ab, fab);
+            
             c(ic,:) = clone;
             Fc(ic) = fc;
             ic = ic + 1;
