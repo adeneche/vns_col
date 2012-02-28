@@ -18,9 +18,7 @@ for I = 1:numExe
     waitbar(0, wbh, ['starting...']);
     set(wbh, 'Name', ['Execution ' int2str(I)]);
 
-    tic;
     [fit, iter, t, lbests, gbests] = hais(N, M, NcRatio, S, pr, MaxIter);
-    t = toc;
     
     fits = [fits; fit];
     iters = [iters; iter];
