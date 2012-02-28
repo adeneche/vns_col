@@ -54,7 +54,6 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
     
     if (Fp(1) < bestFit) 
         bestFit = Fp(1);
-        bestFit2 = FitnessI(P(1,:));
         bestIter = iter;
     end
     
@@ -63,6 +62,7 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
     iter = iter + 1;
 end 
 T = toc;
+bestFit2 = FitnessI(P(1,:));
 %bestFit = min(Fp);
 end
 
