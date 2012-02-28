@@ -4,7 +4,7 @@ function [ F ] = Fitness( P )
   N = size(P, 1);
   F = zeros(N, 1);
   for i = 1:N
-      F(i) = FitnessI_opt(P(i,:));
+      F(i) = Fitness2I(P(i,:));
   end
 end
 
