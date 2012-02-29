@@ -43,7 +43,7 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
         end
         
         for i=1:nc
-            [clone fc]= hypermutation3 (ab, leftd, rightd);            
+            [clone fc]= hypermutation3 (ab, leftd, rightd);
             c(ic,:) = clone;
             Fc(ic) = fc;
             ic = ic + 1;

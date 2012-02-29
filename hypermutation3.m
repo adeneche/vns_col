@@ -27,6 +27,6 @@ leftd(klm) = leftd(klm)+1;
 krm = M-k+mutated(k);
 rightd(krm) = rightd(krm)+1;
 
-fm = sum(leftd > 1) + sum(rightd > 1);
+fm = sum((leftd - 1) .* (leftd > 1)) + sum((rightd - 1) .* (rightd > 1));
 
 end
