@@ -1,5 +1,5 @@
-function [ mutated, fm ] = hypermutation3( individu, ~, leftd, rightd )
-%hypermutation: permute 2 cases de l'individu
+function [ mutated, fm ] = hypermutation3( individu, leftd, rightd )
+%hypermutation: permute 2 cases de l'individu, et calcule la fitness au passage 
 mutated= individu;
 M = size(individu,2);
 % trouver i et j les indices de 2 cases de l'individu tel que i !=j
@@ -27,8 +27,6 @@ leftd(klm) = leftd(klm)+1;
 krm = M-k+mutated(k);
 rightd(krm) = rightd(krm)+1;
 
-fm = sum(leftd > 1) + sum(rightd > 1);
+fm = sum((leftd - 1) .* (leftd > 1)) + sum((rightd - 1) .* (rightd > 1));
 
 end
-
- 

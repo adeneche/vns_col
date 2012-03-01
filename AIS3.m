@@ -25,8 +25,6 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
     if (mod(iter, 5)==0)  
         waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' int2str(bestFit) ')']);
     end
-    % à ce stade la population est triée selon sa fitness
-    % donc le meilleur individu est le 1er
 
     for j= 1: N
         ab= P( j,:) ;
@@ -35,9 +33,16 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
         nc= nombreclones(N, Nc, j);
         c = zeros(nc+1, M); 
         Fc = zeros(nc+1, 1);
-        
+
+        leftd = zeros(2*M, 1);
+        rightd = zeros(2*M, 1);
+        for i= 1:M
+            leftd(i + ab(i)) = leftd(i + ab(i)) + 1;
+            rightd(M-i + ab(i)) = rightd(M-i + ab(i)) + 1;
+        end
+       
         for i=1:nc
-            [clone fc]= hypermutation (ab, fab);
+            [clone fc]= hypermutation3 (ab, leftd, rightd);
             c(i,:) = clone;
             Fc(i) = fc;
         end
@@ -50,7 +55,6 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
         Fp(j) = fp;
     end
     
-%     Fp= Fitness(P);
     Rp= calculerang(Fp);
     P = P(Rp,:);
     Fp = Fp(Rp);
@@ -63,8 +67,8 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
     lbests(iter) = Fp(1);
     gbests(iter) = bestFit;
     iter = iter + 1;
-end 
+end
+
 T = toc;
-%bestFit = min(Fp);
 end
 

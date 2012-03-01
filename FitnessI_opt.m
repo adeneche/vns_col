@@ -3,15 +3,14 @@ function [ F ] = FitnessI_opt( ind )
 
 M = size(ind, 2); % nombre de colonnes
 % set left and right diagonal counters to 0
-leftd = zeros(2*M, 1);
-rightd = zeros(2*M, 1);
 
-for i= 1:M
-    leftd(i + ind(i)) = leftd(i + ind(i)) + 1;
-    rightd(M-i + ind(i)) = rightd(M-i + ind(i)) + 1;
-end
+I=1:M;
+li = I + ind;
+ri = M - I + ind;
 
-F = sum(leftd > 1)+sum(rightd > 1);
+li=sort(li);
+ri=sort(ri);
+F = sum(li((1:end-1))==li(2:end))+sum(ri((1:end-1))==ri(2:end));
 
 end
 
