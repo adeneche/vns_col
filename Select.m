@@ -1,4 +1,4 @@
-function [ P, Fp ] = select( Fc,C,S,pr,N )
+function [ P, Fp ] = Select( Fc,C,S,pr,N )
 % select:  sélection d'une nouvelle population a partir de clones 
 %   Detailed explanation goes here
 % Fc: Vecteur qui contient l'affinité des clones 

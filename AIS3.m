@@ -17,13 +17,16 @@ Rp= calculerang(Fp);
 P = P(Rp,:); % trier la population selon son affinité
 Fp= Fp(Rp);
 
+firstI = Inertia(P);
+
 Nc = round(N*NcRatio);
 
 tic;
 iter = 1; % nombre d'iterations
 while ~conditionarret(Fp, MinF, iter, MaxIter)
     if (mod(iter, 5)==0)  
-        waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' int2str(bestFit) ')']);
+        I = Inertia(P)/firstI;
+        waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' int2str(bestFit) ') inertia (' num2str(I) ')']);
     end
 
     for j= 1: N
