@@ -1,7 +1,7 @@
 function [ bestFit2, bestIter, T, lbests, gbests ] = AIS2( N, M, NcRatio, S, pr, MaxIter )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-global wbh;
+global wbh prblm;
 
 MinF = 0;
 bestFit = intmax;
@@ -23,7 +23,7 @@ Nc = round(N*NcRatio);
 
 tic;
 iter = 1; % nombre d'iterations
-while ~conditionarret(Fp, MinF, iter, MaxIter)
+while ~conditionarret(Fp, prblm.minF, iter, MaxIter)
     if (mod(iter, 5)==0)  
         I = Inertia(P)/firstI;
         waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' int2str(bestFit) ') inertia (' num2str(I) ')']);
@@ -36,16 +36,9 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
     for j= 1: N
         ab= P( j,:) ;
         nc= nombreclones(N, Nc, j);
- 
-        leftd = zeros(2*M, 1);
-        rightd = zeros(2*M, 1);
-        for i= 1:M
-            leftd(i + ab(i)) = leftd(i + ab(i)) + 1;
-            rightd(M-i + ab(i)) = rightd(M-i + ab(i)) + 1;
-        end
         
         for i=1:nc
-            [clone fc]= hypermutation3 (ab, leftd, rightd);
+            [clone fc]= hypermutation (ab);
             c(ic,:) = clone;
             Fc(ic) = fc;
             ic = ic + 1;
@@ -71,6 +64,6 @@ while ~conditionarret(Fp, MinF, iter, MaxIter)
 end
 
 T = toc;
-bestFit2 = FitnessI(P(1,:));
+bestFit2 = Fitness2I(P(1,:));
 end
 
