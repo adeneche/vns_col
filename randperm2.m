@@ -1,6 +1,5 @@
 function r = randperm2(n)
 p = 1 : n;
-len = n;
 r = zeros(1,2);
 
 ii = ceil(rand * n);
