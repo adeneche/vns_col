@@ -1,4 +1,4 @@
-function [ adj ] = loadDimacs(filename)
+function [ adj, N, E ] = loadDimacs(filename)
 %loadDimacs: charge un fichier dimacs
 
 fid=fopen(filename, 'r');
@@ -32,5 +32,7 @@ for i = 1:E
 	adj(edge(2), edge(1))=1;
 	fgetl(fid);
 end
+
+fclose(fid);
 
 end

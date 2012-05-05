@@ -15,19 +15,15 @@ end
 %prblm = [];
 
 % load bpp data files
-fid = fopen(instance, 'r');
+[ prblm.adj, prblm.N, prblm.E ] = loadDimacs(instance);
 prblm.minF = minF;
-prblm.N = fscanf(fid, '%d', [1 1]);
-prblm.C = fscanf(fid, '%d', [1 1]);
-prblm.W = fscanf(fid, '%d', [1 prblm.N]);
-fclose(fid);
 
 fits = zeros(numExe, 1);
 iters = zeros(numExe, 1);
 ts = zeros(numExe, 1);
 
 for I = 1:numExe
-    waitbar(0, wbh, ['starting...']);
+    waitbar(0, wbh, 'starting...');
     set(wbh, 'Name', ['Execution ' int2str(I)]);
 
     [fit, iter, t, lbests, gbests] = hais(popSize, prblm.N, NcRatio, S, pr, MaxIter);
