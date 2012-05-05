@@ -19,8 +19,8 @@ for i = 1:numIter
     end
     
     m = mutated;
-    mutated (r(1))= m (r(2));
-    mutated (r(2))= m (r(1));
+    m (r(1))= mutated (r(2));
+    m (r(2))= mutated (r(1));
     
     tabulist(r(1), r(2)) = tabutime;
     tabulist(r(2), r(1)) = tabutime;
@@ -28,7 +28,8 @@ for i = 1:numIter
     fitn = Fitness2I(m);
     if (fitn < fit)
         fit = fitn;
-        disp([int2str(fitn) ' : ' int2str(i)]);
+        mutated = m;
+        disp([num2str(fitn) ' : ' int2str(i)]);
     end
     
 end

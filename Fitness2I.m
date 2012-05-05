@@ -33,6 +33,9 @@ end
 
 fit = sum(bins < prblm.C); % nombre de bins occupés
 
+free = max(bins(bins < prblm.C)); % espace libre le plus grand
+fit = fit + (1 - free/(prblm.C*prblm.N)); % favoriser un individu qui a un grand espace libre dans un bin
+
 % Best Fit
 %
 % bins = ones(prblm.N, 1)*prblm.C; % au départ tous les bins sont vides
