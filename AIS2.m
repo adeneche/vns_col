@@ -26,7 +26,7 @@ iter = 1; % nombre d'iterations
 while ~conditionarret(Fp, prblm.minF, iter, MaxIter)
     if (mod(iter, 5)==0)  
         I = Inertia(P)/firstI;
-        waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' int2str(bestFit) ') inertia (' num2str(I) ')']);
+        waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' num2str(bestFit) ')']);
     end
     
     c = zeros(Nc, M);
@@ -65,5 +65,6 @@ end
 
 T = toc;
 bestFit2 = Fitness2I(P(1,:));
+
 end
 
