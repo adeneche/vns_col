@@ -3,7 +3,6 @@ function [ bestFit2, bestIter, T, lbests, gbests ] = AIS2( N, M, NcRatio, S, pr,
 %   Detailed explanation goes here
 global wbh prblm;
 
-MinF = 0;
 bestFit = intmax;
 bestIter = intmax;
 
@@ -23,10 +22,10 @@ Nc = round(N*NcRatio);
 
 tic;
 iter = 1; % nombre d'iterations
-while ~conditionarret(Fp, prblm.minF, iter, MaxIter)
+lastImproved = 0;
+while ~conditionarret(Fp, prblm.minF, iter, lastImproved, MaxIter)
     if (mod(iter, 5)==0)  
-        I = Inertia(P)/firstI;
-        waitbar(iter/MaxIter, wbh, [int2str(iter) ' iterations (' num2str(bestFit) ')']);
+        waitbar(lastImproved/MaxIter, wbh, [int2str(iter) ' iters (' num2str(bestFit) ')' ]);
     end
     
     c = zeros(Nc, M);
@@ -56,6 +55,9 @@ while ~conditionarret(Fp, prblm.minF, iter, MaxIter)
     if (Fp(1) < bestFit) 
         bestFit = Fp(1);
         bestIter = iter;
+        lastImproved = 0;
+    else
+        lastImproved = lastImproved + 1;
     end
     
     lbests(iter) = Fp(1);
