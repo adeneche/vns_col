@@ -25,10 +25,10 @@ end
 fit = max(colors); % nombre de couleurs utilisées
 
 % num nodes de la couleur la plus petite
-cnts = sort(counts(counts>0));
+% cnts = sort(counts(counts>0));
 
-min1 = cnts(1)/prblm.N;
-min2 = cnts(2)/(prblm.N*prblm.N);
-fit = fit + min1 + min2;
+% min1 = cnts(1)/prblm.N;
+% min2 = cnts(2)/(prblm.N*prblm.N);
+% fit = fit + min1 + min2;
 
 end
