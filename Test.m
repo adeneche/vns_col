@@ -1,4 +1,4 @@
-function [  ] = Test( instance, minF, hais, numExe, popSize, NcRatio, S, pr, MaxIter, draw )
+function [  ] = Test( instance, minK, hais, numExe, popSize, Nc, Nm, r, S, MaxIter, draw )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -12,21 +12,47 @@ if (draw == 1)
     numExe = 1;
 end
 
-%prblm = [];
-
 % load bpp data files
 [ prblm.adj, prblm.N, prblm.E ] = loadDimacs(instance);
-prblm.minF = minF;
+prblm.minF = 0;
 
 fits = zeros(numExe, 1);
 iters = zeros(numExe, 1);
 ts = zeros(numExe, 1);
 
+
 for I = 1:numExe
     waitbar(0, wbh, 'starting...');
     set(wbh, 'Name', ['Execution ' int2str(I)]);
 
-    [fit, iter, t, lbests, gbests] = hais(popSize, prblm.N, NcRatio, S, pr, MaxIter);
+    % utiliser DSATUR pour trouver K initial
+    dsol = dsatur(prblm.N, prblm.adj);
+    K = max(dsol);
+
+    disp([ 'DSATUR a trouvé ' int2str(K) ' couleurs'])
+
+    % éliminer l'une des couleurs de dsol
+    dsol(dsol == K) = K-1;
+    K = K-1;
+
+    prblm.dsol = dsol;
+    prblm.K = K;
+
+    improvingK = 1;
+
+    while improvingK
+        disp(['Chercher une ' int2str(prblm.K) ' coloration with dsol fit: ' int2str(FitnessI(prblm.dsol)) ]);
+        improvingK = 0;
+        [fit, sol, iter, t, lbests, gbests] = hais(popSize, prblm.K, Nc, Nm, r, S, MaxIter);
+        if (fit == 0 && prblm.K > minK) % a trouvé une coloration
+            % eliminer l'une des couleurs aléatoirement 
+            numv = sum(sol == prblm.K);
+            sol(sol == prblm.K) = randi(prblm.K-1,1,numv); 
+            prblm.K = prblm.K - 1; % voir si on peut trouver une (K-1)-coloration
+            prblm.dsol = sol;
+            improvingK = 1;
+        end
+    end
     
     fits(I) = fit;
     iters(I) = iter;

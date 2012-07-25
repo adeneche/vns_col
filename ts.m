@@ -4,34 +4,34 @@ function [ mutated ] = ts(individu, numIter, tabutime)
 
 global prblm;
 
-tabulist = zeros(prblm.N, prblm.N);
+tabulist = zeros(prblm.N, prblm.K);
 
 mutated = individu;
 
-fit = Fitness2I(individu)
+fit = FitnessI(individu) % nombre de conflits
 
-for i = 1:numIter
+improved = 0;
+iter = 1;
+
+while fit > 0 && improved < numIter
     tabulist(tabulist>0) = tabulist(tabulist>0) - 1;
-    
-    r = randperm2(prblm.N); % 2 entier aléatoire non égaux
-    while tabulist(r(1), r(2)) > 0 % r n'est pas dans la tabu list
-        r = randperm2(prblm.N);
+
+    [mutated, move] = hypermutation2(mutated, tabulist);
+    if (~isempty(move))
+        tabulist(move(1), move(2)) = tabutime;
     end
     
-    m = mutated;
-    m (r(1))= mutated (r(2));
-    m (r(2))= mutated (r(1));
-    
-    tabulist(r(1), r(2)) = tabutime;
-    tabulist(r(2), r(1)) = tabutime;
-    
-    fitn = Fitness2I(m);
+    fitn = FitnessI(mutated);
     if (fitn < fit)
+        improved = 0;
         fit = fitn;
-        mutated = m;
-        disp([num2str(fitn) ' : ' int2str(i)]);
+        %mutated = m;
+        disp([num2str(fitn) ' : ' int2str(iter)]);
+    else
+        improved = improved + 1;
     end
     
+    iter = iter + 1;
 end
 
 end
