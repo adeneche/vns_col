@@ -1,37 +1,45 @@
-function [ mutated ] = ts(individu, numIter, tabutime)
+function [ best ] = ts(prblm, sol, maxIt, fixLong, propLong)
 %ts: applique Tabu Search to the individual
 % numItem: nombre d'itérations du tabu search
 
-global prblm;
-
 tabulist = zeros(prblm.N, prblm.K);
 
-mutated = individu;
+nIt = 0;
+nC = nodesConflicting(prblm, sol); % nombre de conflits
+bestNc = nC;
+best = sol;
 
-fit = FitnessI(individu) % nombre de conflits
+endIt = maxIt;
 
-improved = 0;
-iter = 1;
+msglen = 0;
 
-while fit > 0 && improved < numIter
-    tabulist(tabulist>0) = tabulist(tabulist>0) - 1;
-
-    [mutated, move] = hypermutation2(mutated, tabulist);
-    if (~isempty(move))
-        tabulist(move(1), move(2)) = tabutime;
+while nC > 0 && nIt < endIt
+    nIt = nIt + 1;
+    
+    % chercher le move qui a le plus grand profit et qui n'est pas tabou
+    move = findBest1Move(prblm, sol, tabulist, nIt, nC, bestNc);
+    if isempty(move)
+        continue;
     end
     
-    fitn = FitnessI(mutated);
-    if (fitn < fit)
-        improved = 0;
-        fit = fitn;
-        %mutated = m;
-        disp([num2str(fitn) ' : ' int2str(iter)]);
-    else
-        improved = improved + 1;
+    % marquer le move comme tabou
+    tabulist = setTabu(prblm, sol, move(1), move(2), tabulist, nIt, fixLong, propLong);
+
+    % appliquer le best 1move trouvé
+    sol(move(1)) = move(3);
+
+    nC = nodesConflicting(prblm, sol);
+    
+    if (nC < bestNc)
+        bestNc = nC;
+        endIt = nIt + maxIt;
+        best = sol;
     end
     
-    iter = iter + 1;
+    msg = sprintf('it%10i/%10i | conf: %4i, best: %4i\r', nIt, endIt, nC, bestNc);
+    fprintf(repmat('\b',1,msglen));
+    fprintf(msg);
+    msglen=numel(msg);
 end
 
 end

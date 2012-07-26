@@ -35,10 +35,10 @@ for n = nodes
         
         if (profit < best) % new best move found
             if (profit < 0) % si le move améliore la fitness, ne pas vérifier s'il est tabu
-                best = profit
+                best = profit;
                 bestmove = [n, c];
             elseif (tabumoves(n, c) == 0)
-                best = profit
+                best = profit;
                 bestmove = [n, c];
             end
         end
