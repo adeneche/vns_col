@@ -22,19 +22,21 @@ while improvingK
     % commencer par une solution aléatoire
     sol = randi(prblm.K, 1, prblm.N);
 
-    disp(['Chercher une ' int2str(prblm.K) ' coloration with dsol fit: ' int2str(nodesConflicting(prblm, sol)) ]);
+    disp(['Chercher une ' int2str(prblm.K) ' coloration']);
     improvingK = 0;
     pause(2)
     
-    sol = ts(prblm, sol, maxIt, fixLong, propLong);
-    fit = nodesConflicting(prblm, sol);
-    if (fit == 0 && prblm.K > minK) % a trouvé une coloration
+    [sol, fit] = ts(prblm, sol, maxIt, fixLong, propLong);
+    if (fit == 0) % a trouvé une coloration
+        disp(['found ' int2str(prblm.K) '-coloration']);
         
-        % eliminer l'une des couleurs aléatoirement
-        % sol(sol == prblm.K) = prblm.K - 1;
+        if prblm.K > minK
+            % eliminer l'une des couleurs aléatoirement
+            % sol(sol == prblm.K) = prblm.K - 1;
         
-        prblm.K = prblm.K - 1; % voir si on peut trouver une (K-1)-coloration
-        improvingK = 1;
+            prblm.K = prblm.K - 1; % voir si on peut trouver une (K-1)-coloration
+            improvingK = 1;
+        end
     end
 end
 

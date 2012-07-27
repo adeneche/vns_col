@@ -1,11 +1,12 @@
-function nC = nodesConflicting(prblm, sol)
+function nC = nodesConflicting(sol, adjcols)
 % renvoi le nombre de nodes qui ont un conflit
 
+N = length(sol);
 nC = 0;
 
-% pour chaque vertex
-for v = 1:prblm.N
-    nC = nC + isConflicting(prblm, sol, v);
+% pour chaque node
+for n = 1:N
+    nC = nC + (adjcols(n, sol(n)) > 0);
 end
 
 

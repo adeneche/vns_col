@@ -1,4 +1,4 @@
-function tabu = isTabu(prblm, sol, n, c, tabulist, nIt, nC, bestNc)
+function tabu = isTabu(sol, adjcols, n, c, tabulist, nIt, nC, bestNc)
 
 tabu = 0;
 
@@ -10,7 +10,7 @@ if tabulist(n, c)
         % enhanced aspiration criterion
         tabu = 1;
         
-        profit = moveProfit(prblm, sol, n, c);
+        profit = moveProfit(sol, adjcols, n, c);
         if (profit + nC) < bestNc
             tabu = 0;
         end
