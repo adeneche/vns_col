@@ -3,11 +3,10 @@ function adjcols = updateAdjacency(prblm, adjcols, move)
 
 % for each adjacent node
 vadj = find(prblm.adj(move(1), :));
-for v = vadj
-    % decrement column with same old color
-    adjcols(v, move(2)) = adjcols(v, move(2))- 1;
-    % increment column with same new color
-    adjcols(v, move(3)) = adjcols(v, move(3)) + 1;
-end
+
+% decrement column with same old color
+adjcols(vadj, move(2)) = adjcols(vadj, move(2)) - 1;
+% increment column with same new color
+adjcols(vadj, move(3)) = adjcols(vadj, move(3)) + 1;
 
 end

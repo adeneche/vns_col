@@ -12,7 +12,8 @@ end
 
 type = fscanf(fid, '%s', 1);
 if (~strcmp(type, 'edge'))
-    error('File type != edge');
+    %error('File type != edge');
+    disp(['Warning: type "' type '" != edge'])
 end
 
 % taille du problème

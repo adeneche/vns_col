@@ -40,8 +40,12 @@ while nC > 0 && nIt < endIt
         best = sol;
     end
     
-    if (nC == 0 || mod(nIt, 100) == 0)
-        msg = sprintf('it%10i/%10i | conf: %4i, best: %4i\r', nIt, endIt, nC, bestNc);
+    if (nC == 0)
+        msg = sprintf('it%10i/%10i\n', nIt, endIt);
+        fprintf(repmat('\b',1,msglen));
+        fprintf(msg);
+    else%if (mod(nIt, 1000) == 0)
+        msg = sprintf('it%10i/%10i conf: %4i, best: %4i\n', nIt, endIt, nC, bestNc);
         fprintf(repmat('\b',1,msglen));
         fprintf(msg);
         msglen=numel(msg);
