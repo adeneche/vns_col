@@ -1,30 +1,16 @@
-function [  ] = Test( instance, minK, hais, numExe, popSize, Nc, Nm, r, S, MaxIter, draw )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+function [  ] = Test( instance, minK, numExe, popSize, Nc, Nm, r, S, MaxEvals)
+%Test Coloration par AIS
 
-global wbh prblm
-
-wbh = waitbar(0,'Initializing waitbar...');
-
-disp(['Executing ' func2str(hais)]);
-
-if (draw == 1)
-    numExe = 1;
-end
+global prblm
 
 % load bpp data files
 [ prblm.adj, prblm.N, prblm.E ] = loadDimacs(instance);
-prblm.minF = 0;
 
 fits = zeros(numExe, 1);
-iters = zeros(numExe, 1);
-ts = zeros(numExe, 1);
+evals = zeros(numExe, 1);
 
 
 for I = 1:numExe
-    waitbar(0, wbh, 'starting...');
-    set(wbh, 'Name', ['Execution ' int2str(I)]);
-
     % utiliser DSATUR pour trouver K initial
     dsol = dsatur(prblm.N, prblm.adj);
     K = max(dsol);
@@ -36,38 +22,31 @@ for I = 1:numExe
     K = K-1;
 
     prblm.dsol = dsol;
-    prblm.K = K;
 
     improvingK = 1;
 
     while improvingK
-        disp(['Chercher une ' int2str(prblm.K) ' coloration with dsol fit: ' int2str(FitnessI(prblm.dsol)) ]);
+        disp(['Chercher une ' int2str(K) ' coloration with dsol fit: ' int2str(FitnessI(prblm.dsol)) ]);
         improvingK = 0;
-        [fit, sol, iter, t, lbests, gbests] = hais(popSize, prblm.K, Nc, Nm, r, S, MaxIter);
-        if (fit == 0 && prblm.K > minK) % a trouvé une coloration
+        [fit, sol, eval] = AIS2(popSize, K, Nc, Nm, r, S, MaxEvals);
+        if (fit == 0 && K > minK) % a trouvé une coloration
             % eliminer l'une des couleurs aléatoirement 
-            numv = sum(sol == prblm.K);
-            sol(sol == prblm.K) = randi(prblm.K-1,1,numv); 
-            prblm.K = prblm.K - 1; % voir si on peut trouver une (K-1)-coloration
+            numv = sum(sol == K);
+            sol(sol == K) = randi(K-1,1,numv); 
+            K = K - 1; % voir si on peut trouver une (K-1)-coloration
             prblm.dsol = sol;
             improvingK = 1;
         end
     end
     
     fits(I) = fit;
-    iters(I) = iter;
-    ts(I) = t;
+    evals(I) = eval;
     
-    disp(['Execution ' int2str(I) ' best fit : ' int2str(min(fit)) ' best iter : ' int2str(iter) ' time : ' int2str(t)])
+    disp(['Execution ' int2str(I) ' best fit : ' int2str(min(fit)) ' evals : ' int2str(eval)])
 end
 
 beep
-close(wbh);
 
-disp(['min : ' int2str(min(fits)) ' max : ' int2str(max(fits)) ' mean : ' num2str(mean(fits))]);
+disp(['min : ' int2str(min(fits)) ' mean : ' num2str(mean(fits))]);
 
-if (draw == 1)
-    x = 1:MaxIter;
-    plot(x, gbests, x, lbests);
-end
 end

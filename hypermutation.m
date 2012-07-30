@@ -3,6 +3,7 @@ function [ mutated ] = hypermutation( individu, numMutations )
 global prblm
 
 N = prblm.N;
+K = max(individu);
 
 mutated= individu;
 
@@ -33,7 +34,7 @@ for i = 1:numMutations
     ucols = unique(cols); % valeur distinctes des couleurs adjacentes
     count = histc(cols, ucols); % nombre de fois que chaque couleur apparait dans la liste d'adjacence
 
-    colors = zeros(prblm.K, 1);
+    colors = zeros(K, 1);
     colors(ucols) = count; % nombre de fois que chaque couleur apparait dans l'adjacence
 
 %     candidates = find(colors == min(colors));
@@ -47,7 +48,7 @@ for i = 1:numMutations
     % choisir la couleur qui a le moins de vertex adjacents
     % c = randsample(1:prblm.K, 1, true, 1 - colors / sum(colors));
     invcolors = max(colors) - colors + 1; % la probabilité est inversement proportionelle
-    c = randsample(1:prblm.K, 1, true, invcolors / sum(invcolors));
+    c = randsample(1:K, 1, true, invcolors / sum(invcolors));
 
     mutated(v) = c;
 
