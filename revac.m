@@ -9,11 +9,11 @@ function [bestParams, bestUtility] = revac(popsize, bestsize, smooth, rep, maxev
 
 % cette méthode devrait recevoir les intervals des params à investiguer
 params = zeros(5,2);
-params(1,:) = [10, 100]; % population size (int)
-params(2,:) = [1, 5];    % number of clones multiplier (number)
-params(3,:) = [1, 30];   % number of moves per mutation (int)
-params(4,:) = [0, 1];    % r (num clone formula) (number)
-params(5,:) = [2, 20];   % tournament selection size (int)
+params(1,:) = [10, 15]; % population size (int) (best so far 10)
+params(2,:) = [2, 3];    % number of clones multiplier (number) (best so far 2.3)
+params(3,:) = [10, 30];   % number of moves per mutation (int) (best so far 14)
+params(4,:) = [0, 1];    % r (num clone formula) (number) (best so far 0.41)
+params(5,:) = [2, 10];   % tournament selection size (int) (best so far 7)
 
 % générer population initiale aléatoirement, la valeur de chaque paramètre
 % est généré aléatoirement de manière uniforme
@@ -78,7 +78,7 @@ function mbf = utility(vec, rep)
 
 global prblm
 
-EAMaxEvals = 500; % critère d'arrêt pour l'AIS, nombre max d'evaluations
+EAMaxEvals = 5000; % critère d'arrêt pour l'AIS, nombre max d'evaluations
 
 popSize = vec(1);
 Nc      = floor(vec(2)*popSize);
@@ -124,8 +124,11 @@ function mutated = mutation(parents, child, smooth)
 mutated = child;
 
 for i = 1:5
-    % indice de child(i) dans parents
-    ind = find(parents(:,i) == child(i));
+    values = parents(:,i);
+    values = sort(values);
+    
+    % indice de child(i) dans les values des parents
+    ind = find(values == child(i));
     ind = ind(1);
     
     % . a mutation interval [xai, xbi] is calculated
@@ -133,25 +136,25 @@ for i = 1:5
     %  . to define the mutation interval from a given ci value all values x1i,...,xni for this
     %    parameter in the selected n parents are also taken into account
     if (ind >= smooth)
-        interval(1:smooth) = parents((ind-smooth+1):ind, i);
+        interval(1:smooth) = values((ind-smooth+1):ind);
     else
         %  . as their are no neighbors beyond the upper and lower limits of the domain, we extend
         %    it by mirroring the parent values as well as the mutated values at the limits
         part1 = ind;
-        interval(1:ind) = parents(1:ind, i);
+        interval(1:ind) = values(1:ind);
         part2 = smooth-part1;
-        interval((ind+1):smooth) = parents(1:part2, i);
+        interval((ind+1):smooth) = values(1:part2);
     end
-    numParents = size(parents, 1);
+    numParents = length(values);
     if (ind+smooth-1 <= numParents)
-        interval((smooth+1):end) = parents(ind:(ind+smooth-1), i);
+        interval((smooth+1):end) = values(ind:(ind+smooth-1));
     else
         %  . as their are no neighbors beyond the upper and lower limits of the domain, we extend
         %    it by mirroring the parent values as well as the mutated values at the limits
         part1 = numParents - ind + 1;
-        interval((smooth+1):(smooth+1+part1)) = parents(ind:end, i);
+        interval((smooth+1):(smooth+1+part1)) = values(ind:end);
         part2 = smooth - part1;
-        interval((smooth+part1+2):2*smooth) = parents((end-part2+1):end, i);
+        interval((smooth+part1+2):2*smooth) = values((end-part2+1):end);
     end
     %  . sort them in increasing order
     %  . xai = h-th lower neighbor of ci
