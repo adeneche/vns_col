@@ -32,21 +32,31 @@ global prblm
 prblm.NumColors = 5; % optimal solution
 prblm.dsol = []; % puisqu'on commence directement par la couleur optimale
 
+clc;
+
 utilities = zeros(popsize, 1);
 % evaluation initiale: evaluaer l'utility de chaque vector
 for v = 1:popsize
     utilities(v) = utility(pop(v,:), rep);
 end
 
+
 nIt = 0;
 while nIt < maxevals
+
+    clc;
     nIt = nIt + 1;
     
-    disp(['Iteration ' int2str(nIt)])
+    fprintf(['Iteration ' int2str(nIt) '\n']);
     
     % trier la population par utility
     [utilities, I] = sort(utilities);
     pop = pop(I,:);
+    
+    for p = 1:popsize
+        fprintf([mat2str(pop(p,:), 3) ': ' num2str(utilities(p), 3) '\n']);
+    end
+    fprintf('\n');
     
     % parent selection: deterministic, select n (bestsize) best vectors
     % (with highest utility)
@@ -69,6 +79,12 @@ pop = pop(I,:);
 bestParams = pop(1,:);
 bestUtility = utilities(1,:);
 
+disp('final population:')
+for p = 1:popsize
+    fprintf([mat2str(pop(p,:), 6) ': ' num2str(utilities(p), 3) '\n']);
+end    
+fprintf('\n');
+
 end
 
 function mbf = utility(vec, rep)
@@ -78,7 +94,7 @@ function mbf = utility(vec, rep)
 
 global prblm
 
-EAMaxEvals = 5000; % critère d'arrêt pour l'AIS, nombre max d'evaluations
+EAMaxEvals = 500; % critère d'arrêt pour l'AIS, nombre max d'evaluations
 
 popSize = vec(1);
 Nc      = floor(vec(2)*popSize);
@@ -88,6 +104,7 @@ S       = vec(5);
 
 % lancer AIS avec les params vec et la coloration optimale
 mbf = 0;
+
 fprintf([mat2str(vec, 3) ':']);
 
 for r = 1:rep
@@ -101,7 +118,8 @@ for r = 1:rep
 end
 
 mbf = mbf / rep;
-disp(mbf)
+
+fprintf([num2str(mbf, 3) '\n']);
 
 end
 
