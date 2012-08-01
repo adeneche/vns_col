@@ -16,12 +16,15 @@ choosen = zeros(N,1);
 for i = 1:numMutations
     % calculer le nombre de conflits pour chaque vertex à considerer
     conflits = numConflits(mutated, vertices);
-    fit = sum(conflits);
-    if (fit == 0) 
+    if (sum(conflits) == 0) 
         return; % aucun vertex n'a de conflits
     end
     
     % choisir un vertex proportionelement à son nombre de conflits
+    
+    % conflits = conflits + 1;
+    fit = sum(conflits);
+
     if (length(vertices) == 1)
         v = vertices;
     else

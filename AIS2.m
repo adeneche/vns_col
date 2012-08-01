@@ -7,22 +7,21 @@ sol = [];
 
 P= initialisation (popSize,prblm.N, numColors);
 Fp= Fitness (P);
-Rp= calculerang(Fp);
+
+[Fp, Rp] = sort(Fp);
+P = P(Rp,:); % trier la population selon son affinité
 
 numEvals = popSize;
 
-P = P(Rp,:); % trier la population selon son affinité
-Fp= Fp(Rp);
-
-
 msglen = 0;
 nIt = 0;
+
+C = zeros(Nc, prblm.N);
+Fc = zeros(Nc, 1);
+
 while bestFit > 0 && numEvals < MaxEval
     nIt = nIt + 1;
-    
-    % affichage à la ts
-    c = zeros(Nc, prblm.N);
-    Fc = zeros(Nc, 1);
+
     ic = 1;
     
     for j= 1: popSize
@@ -33,12 +32,13 @@ while bestFit > 0 && numEvals < MaxEval
         else
             nc = Nc - ic +1;
         end
+        
         numm = nombremutations(popSize, Nm, j, Fp(j));
         
         for i=1:nc
-            [clone]= hypermutation (ab, numm);
-            c(ic,:) = clone;
-            Fc(ic) = FitnessI(clone);
+            c = hypermutation (ab, numm);
+            C(ic,:) = c;
+            Fc(ic) = FitnessI(c);
             ic = ic + 1;
         end
     end
@@ -46,13 +46,12 @@ while bestFit > 0 && numEvals < MaxEval
     numEvals = numEvals + Nc;
     
     % merge pop and clones
-    Np = [P; c];
+    Np = [P; C];
     Fn = [Fp; Fc];
     [P, Fp] = Select (Fn,Np,S,popSize);
     
-    Rp= calculerang(Fp);
+    [Fp, Rp] = sort(Fp);
     P = P(Rp,:);
-    Fp = Fp(Rp);
     
     if (Fp(1) < bestFit)
         bestFit = Fp(1);
@@ -61,12 +60,15 @@ while bestFit > 0 && numEvals < MaxEval
     
     if (bestFit == 0)
         msg = sprintf('iti, evals: %i\n', nIt, numEvals);
-    else%if (mod(nIt, 1000) == 0)
+        fprintf(repmat('\b',1,msglen));
+        fprintf(msg);
+        msglen=numel(msg);
+    else%if (mod(nIt, 10) == 0)
         msg = sprintf('it%i, evals: %i, best: %i\n', nIt, numEvals, bestFit);
+        fprintf(repmat('\b',1,msglen));
+        fprintf(msg);
+        msglen=numel(msg);
     end
-    fprintf(repmat('\b',1,msglen));
-    fprintf(msg);
-    msglen=numel(msg);
 end
 
 fprintf(repmat('\b',1,msglen)); % supprimer l'output de cette execution

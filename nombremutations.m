@@ -6,7 +6,7 @@ function [ nc ] = nombremutations( N,Mut,i,fit)
 
 %TODO implémenter la formule de Dabrowski
 %A= (fit/100) * Mut;
-A= (N-i)/N * Mut + 1;
+A= (N-i-1)/N * Mut;
 %A = fit/5;
 %A = i;
 
