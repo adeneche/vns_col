@@ -9,9 +9,9 @@ global prblm
 P = randi(K, N, M);
 
 % inclure la solution de DSATUR dans la population initiale
-% if (~isempty(prblm.dsol))
-%     P(N,:) = prblm.dsol;
-% end
+if (~isempty(prblm.dsol))
+    P(N,:) = prblm.dsol;
+end
 
 end
 

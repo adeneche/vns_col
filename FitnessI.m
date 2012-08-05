@@ -7,6 +7,6 @@ N = prblm.N; % num vertices
 
 conflits = numConflits(ind, 1:N);
 
-fit = sum(conflits); % nombre de conflits pour cet individu
+fit = sum(conflits > 0); % nombre de nodes en conflit
 
 end

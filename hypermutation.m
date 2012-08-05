@@ -21,13 +21,10 @@ for i = 1:numMutations
     end
     
     % choisir un vertex proportionelement à son nombre de conflits
-    
-    % conflits = conflits + 1;
-    fit = sum(conflits);
-
     if (length(vertices) == 1)
         v = vertices;
     else
+        fit = sum(conflits);
         v = randsample(vertices, 1, true, conflits/fit);
     end
     

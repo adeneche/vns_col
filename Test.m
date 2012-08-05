@@ -28,6 +28,9 @@ for I = 1:numExe
     while improvingK
         disp(['Chercher une ' int2str(K) ' coloration with dsol fit: ' int2str(FitnessI(prblm.dsol)) ]);
         improvingK = 0;
+        
+        prblm.K = K;
+        
         [fit, sol, eval] = AIS2(popSize, K, Nc, Nm, r, S, MaxEvals);
         if (fit == 0 && K > minK) % a trouvé une coloration
             % eliminer l'une des couleurs aléatoirement 
