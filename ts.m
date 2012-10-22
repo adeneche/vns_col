@@ -1,4 +1,4 @@
-function [ best, bestNc ] = ts(prblm, sol, maxIt, fixLong, propLong, verbose)
+function [ best, bestNc, adjcols ] = ts(prblm, sol, maxIt, fixLong, propLong, verbose, adjcols)
 %ts: applique Tabu Search to the individual
 % numItem: nombre d'itérations du tabu search
 
@@ -6,9 +6,12 @@ if nargin == 5
     verbose = false;
 end
 
+if nargin < 7
+    adjcols = buildAdjacency(prblm, sol);
+end
+
 tabulist = zeros(prblm.N, prblm.K);
 
-adjcols = buildAdjacency(prblm, sol);
 
 nIt = 0;
 nC = nodesConflicting(sol, adjcols); % nombre de conflits

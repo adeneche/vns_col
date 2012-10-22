@@ -1,8 +1,13 @@
-function sol = tscoloring(instance, minK, maxIt, fixLong, propLong)
+function sol = coloring(heuristic, instance, minK, maxIt, fixLong, propLong, verbose)
 
 prblm = [];
 
+if nargin == 6
+    verbose = false;
+end
+
 % load instance
+disp('Loading the instance...')
 [ prblm.adj, prblm.N, prblm.E ] = loadDimacs(instance);
 
 % utiliser DSATUR pour trouver uppper bound for K
@@ -20,13 +25,10 @@ while improvingK
     % commencer par une solution aléatoire
     sol = randi(prblm.K, 1, prblm.N);
 
-    % eliminer l'une des couleurs aléatoirement
-    % sol(sol == (prblm.K+1)) = prblm.K;
-
     disp(['Chercher une ' int2str(prblm.K) ' coloration']);
     improvingK = 0;
     
-    [sol, fit] = ts(prblm, sol, maxIt, fixLong, propLong);
+    [sol, fit] = heuristic(prblm, sol, maxIt, fixLong, propLong, verbose);
     if (fit == 0) % a trouvé une coloration
         disp(['found ' int2str(prblm.K) '-coloration']);
         
