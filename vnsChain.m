@@ -12,8 +12,10 @@ function [sol, adjcols] = vnsChain(prblm, sol, adjcols, iVns)
 % than once. We repeat this process by performing successively i such sequences 
 % of changes, with i origin vertices.
 
+global VNSNeighs;
+
 % calculer combien de fois on va repeter l'heuristique
-d = (iVns*5)/prblm.N;
+d = (iVns*VNSNeighs)/prblm.N;
 delta = floor(d*15);
 maxIt = 20 - delta;
 stopIt = randi(maxIt)+1;
@@ -35,14 +37,16 @@ for it = 1:stopIt
    end
    
    % move it to the best possible other color class
-   move = findBestNodeMove(sol, adjcols);
-   newBest = move(3);
+%   move = findBestNodeMove(sol, adjcols);
+%   newBest = move(3);
+   newBest = findBestNodeMove(sol, n, adjcols);
+   move = [n sol(n) newBest];
    
    %do the move
-   sol(move(1)) = newBest;
-   blacklist(move(1)) = 1;
+   sol(n) = newBest;
+   blacklist(n) = 1;
    
-   adjcols = updateAdjacency(prblm, adjcols, move);
+   adjcols = updateAdjacency(prblm, sol, adjcols, move);
    
    % Since sol is a local optimum, this move will create new conflicting 
    % vertices in Vj.
@@ -67,7 +71,8 @@ for it = 1:stopIt
        % printf(" (%2d) --",newConf);
        
        [sol, adjcols] = chainUpdate(prblm, sol, adjcols, newBest, newConflicting, blacklist);
-       preConflicting = postConflicting;
+%       preConflicting = postConflicting;
+       [~, preConflicting] = getConflictingNodes(sol, adjcols);
    end
    % printf("\n");
 end

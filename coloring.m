@@ -1,8 +1,8 @@
-function sol = coloring(heuristic, instance, minK, maxIt, fixLong, propLong, verbose)
+function sol = coloring(heuristic, instance, startK, minK, maxIt, fixLong, propLong, verbose)
 
 prblm = [];
 
-if nargin == 6
+if nargin == 7
     verbose = false;
 end
 
@@ -10,12 +10,15 @@ end
 disp('Loading the instance...')
 [ prblm.adj, prblm.N, prblm.E ] = loadDimacs(instance);
 
-% utiliser DSATUR pour trouver uppper bound for K
-disp('Lunching DSATUR...')
-sol = dsatur(prblm.N, prblm.adj)';
-K = max(sol);
-
-disp([ 'DSATUR a trouvé ' int2str(K) ' couleurs'])
+if (startK == -1)
+    % utiliser DSATUR pour trouver uppper bound for K
+    disp('Lunching DSATUR...')
+    sol = dsatur(prblm.N, prblm.adj)';
+    K = max(sol);
+    disp([ 'DSATUR a trouvé ' int2str(K) ' couleurs'])
+else
+    K = startK+1;
+end
 
 K = K-1;
 prblm.K = K;

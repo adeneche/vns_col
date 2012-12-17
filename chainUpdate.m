@@ -19,14 +19,18 @@ while (newConf > 0)
     end
     
     % move it to the best possible other color class
-    move = findBestNodeMove(sol, adjcols);
-    newBest = move(3);
+%     move = findBestNodeMove(sol, adjcols);
+%     newBest = move(3);
+    newBest = findBestNodeMove(sol, id, adjcols);
+    move = [id sol(id) newBest];
     
     %do the move
-    sol(move(1)) = newBest;
-    blacklist(move(1)) = 1;
+%     sol(move(1)) = newBest;
+%     blacklist(move(1)) = 1;
+    sol(id) = newBest;
+    blacklist(id) = 1;
     
-    adjcols = updateAdjacency(prblm, adjcols, move);
+    adjcols = updateAdjacency(prblm, sol, adjcols, move);
     
     % get current conflicting nodes
     [~, postConflicting] = getConflictingNodes(sol, adjcols);

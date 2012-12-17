@@ -1,10 +1,10 @@
-function bestMove = findBest1Move(sol, adjcols, tabulist, nIt, nC, bestNc)
+function bestMove = findBest1Move(prblm, sol, adjcols, tabulist, nIt, nC, bestNc)
 % pour chaque noder/couleur, renvoi le couple qui donne le plus de profit
 % si aucun best move trouvé, renvoi empty matrix
 % sinon renvoi [n curColor newColor]
 
-N = length(sol);
-K = max(sol);
+N = prblm.N;
+K = prblm.K;
 
 % identifier les conflicting nodes
 %inds = sub2ind(size(adjcols), 1:N, sol);

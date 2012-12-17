@@ -9,6 +9,10 @@ function node = getRandomChainNode(sol, nextClass, conflicting, blacklist)
 % si possible, l nth (n choisi aléatoirement) vertex qui est
 % conflicting et not blacklisted.
 
+if (nargin < 4)
+    blacklist = false(1, length(sol));
+end
+
 % Color class defined
 if (nextClass ~= -1)
     % count conflicting nodes in nextClass color class

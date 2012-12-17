@@ -1,4 +1,4 @@
-function [ best, bestNc, adjcols ] = ts(prblm, sol, maxIt, fixLong, propLong, verbose, adjcols)
+function [ best, bestNc, bestAdj ] = ts(prblm, sol, maxIt, fixLong, propLong, verbose, adjcols)
 %ts: applique Tabu Search to the individual
 % numItem: nombre d'itérations du tabu search
 
@@ -17,6 +17,7 @@ nIt = 0;
 nC = nodesConflicting(sol, adjcols); % nombre de conflits
 bestNc = nC;
 best = sol;
+bestAdj = adjcols;
 
 endIt = maxIt;
 
@@ -26,7 +27,7 @@ while nC > 0 && nIt < endIt
     nIt = nIt + 1;
     
     % chercher le move qui a le plus grand profit et qui n'est pas tabou
-    move = findBest1Move(sol, adjcols, tabulist, nIt, nC, bestNc);
+    move = findBest1Move(prblm, sol, adjcols, tabulist, nIt, nC, bestNc);
     if isempty(move)
         continue;
     end
@@ -37,7 +38,7 @@ while nC > 0 && nIt < endIt
     % appliquer le best 1move trouvé
     sol(move(1)) = move(3);
 
-    adjcols = updateAdjacency(prblm, adjcols, move);
+    adjcols = updateAdjacency(prblm, sol, adjcols, move);
 
     nC = nodesConflicting(sol, adjcols);
     
@@ -45,6 +46,7 @@ while nC > 0 && nIt < endIt
         bestNc = nC;
         endIt = nIt + maxIt;
         best = sol;
+        bestAdj = adjcols;
     end
     
     if verbose

@@ -1,4 +1,4 @@
-function adjcols = updateAdjacency(prblm, adjcols, move)
+function adjcols = updateAdjacency(prblm, sol, adjcols, move)
 % update the adjacency matrix from the current move and the graph status
 
 % for each adjacent node
