@@ -21,17 +21,18 @@ psize = fscanf(fid, '%d', [1 2]);
 fgetl(fid);
 
 N=psize(1); % nombre de nodes
-E=psize(2); % nombre d'edges
+% E=psize(2); % nombre d'edges
 
 % matrice d'adjacence
 adj = zeros(N,N);
-
-for i = 1:E
+E = 0;
+while ~feof(fid)
 	fscanf(fid, '%c', 1);
 	edge = fscanf(fid, '%d', [1 2]);
 	adj(edge(1), edge(2))=1;
 	adj(edge(2), edge(1))=1;
 	fgetl(fid);
+    E = E +1;
 end
 
 fclose(fid);
